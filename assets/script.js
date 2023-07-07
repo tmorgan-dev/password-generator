@@ -1,6 +1,6 @@
 // Create Arrays to contain the character sets that will be used
-var upperCase = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
-var lowerCase = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
+var upperCase = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
+var lowerCase = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
 var number = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
 var special = ["!", "@", "#", "$", "%", "^", "&", "*", "(", ")"]
 
@@ -13,48 +13,29 @@ function generatePassword() {
   ;
   // password length must be between 8 and 128 char
   var passwordLength = window.prompt("Enter desired password length, between 8 and 128");
-  if ((passwordLength < 7) || (passwordLength > 129)) {;
+  if ((passwordLength < 7) || (passwordLength > 129)) {
+    ;
     alert("Invalid input; Please try again");
     return;
   };
 
   // prompt user weather an upper case character is required
-  var upperRequired = window.confirm("Is upper case character required? Y/N");
-  // upperRequired = upperRequired.toUpperCase();
-  // if (upperRequired !== "Y" && upperRequired !== "N") {;
-  //   alert("Invalid input; Please try again");
-  //   return;
-  // };
+  var upperRequired = window.confirm("If upper case character is required, click OK. If not click Cancel.");
 
   // prompt user weather a lower case character is required
-  var lowerRequired = window.confirm("Is lower case character required? Y/N");
-  // lowerRequired = lowerRequired.toUpperCase();
-  // if (lowerRequired !== "Y" && lowerRequired !== "N") {;
-  //   alert("Invalid input; Please try again");
-  //   return;
-  // };
+  var lowerRequired = window.confirm("If lower case character is required, click OK. If not click Cancel.");
 
   // prompt user weather a number is required
-  var numberRequired = window.confirm("Is number required? Y/N")
-  // numberRequired = numberRequired.toUpperCase();
-  // if (numberRequired !== "Y" && numberRequired !== "N") {
-  //   alert("Invalid input; Please try again");
-  //   return;
-  // };
+  var numberRequired = window.confirm("If number is required, click OK. If not click Cancel.")
 
   // prompt user weather a special character is required
-  var specialRequired = window.confirm("Is a special character required? Y/N")
-  // specialRequired = specialRequired.toUpperCase();
-  // if (specialRequired !== "Y" && specialRequired !== "N") {
-  //   alert("Invalid input; Please try again");
-  //   return;
-  // };
+  var specialRequired = window.confirm("If special character is required, click OK. If not click Cancel.")
 
   if (!upperRequired && !lowerRequired && !numberRequired && !specialRequired) {
     alert("Must select at least one option")
   }
 
-  //loads the gathered options into an object
+  //loads the gathered options into an object to reference in the next object
   var passwordOptions = {
     passwordLength: passwordLength,
     upperRequired: upperRequired,
@@ -63,50 +44,63 @@ function generatePassword() {
     specialRequired: specialRequired,
   }
 
+  //creates an object to grab the character sets if they are required
   var chosenOptions = [
     {
-      option: passwordOptions.upperRequired,
+      required: passwordOptions.upperRequired,
       characters: upperCase
     },
     {
-      option: passwordOptions.lowerRequired,
+      required: passwordOptions.lowerRequired,
       characters: lowerCase
     },
     {
-      option: passwordOptions.numberRequired,
+      required: passwordOptions.numberRequired,
       characters: number
     },
     {
-      option: passwordOptions.specialRequired,
+      required: passwordOptions.specialRequired,
       characters: special
     },
   ]
-  var password = []
-  var possiblePassword = []
 
-  //loads all of the required characters into the possible password if selected
+  //create undefined variables to house the password and possible password
+  var password = []
+  var passwordCharacters = []
+
+  //loads all of the required characters into the possible password
   chosenOptions.forEach(function (options) {
-    if (options.option) {
-      possiblePassword.push(options.characters)
+    if (options.required) {
+      passwordCharacters.push(options.characters)
     }
   }
   )
-  var passwordCharacters = possiblePassword.flat()
 
-  console.log(passwordCharacters)
-  console.log(possiblePassword)
+  //takes all of the characters in possible password and combines them into 
+  var possiblePassword = passwordCharacters.flat()
+
   //function to grab a random element from an array
   function getRandomArray(array) {
     var randomIndex = Math.floor(Math.random() * array.length)
     var randomElement = array[randomIndex]
     return randomElement
   }
-  //loads the randomized elements into the password variable for the desired password length
+  //gets items from the possible password list for the desired password length
   for (var i = 0; i < passwordOptions.passwordLength; i++) {
-    var newPassword = getRandomArray(passwordCharacters)
-    password.push(newPassword)
+    var randomPassword = getRandomArray(possiblePassword)
+    password.push(randomPassword)
   }
-  return password.join("")
+
+  console.log(possiblePassword)
+
+  if (randomPassword !== includes(passwordCharacters)) {
+    getRandomArray()
+  }
+  else {
+    return password.join("")
+  }
+
+  // return password.join("")
 }
 
 function writePassword() {
